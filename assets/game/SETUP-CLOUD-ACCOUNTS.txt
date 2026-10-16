@@ -1,0 +1,29 @@
+ARCADIUMX CLOUD ACCOUNTS — SETUP
+
+This package includes the account interface and cloud-save integration for the ArcadiumX, Aquasub Go, Jet Rush, and FLUXR. It requires a Supabase project before accounts can work online.
+
+1. Create a project at https://supabase.com/ and open its SQL Editor.
+2. Open supabase-schema.sql from this package, copy all of it into the SQL Editor, and run it.
+3. In Supabase Project Settings -> API, copy the Project URL and the publishable/anon public key.
+4. Edit cloud-config.js and replace YOUR_SUPABASE_PROJECT_URL and YOUR_SUPABASE_PUBLISHABLE_OR_ANON_KEY with those values. Never use a service_role/secret key in website code.
+5. In Supabase Authentication settings, configure your production website URL and allowed redirect URLs. For easier initial testing, email confirmation can be adjusted in Authentication settings; for public launch, keep suitable email verification and password security enabled.
+6. NETLIFY MANUAL DRAG-AND-DROP DEPLOYMENT:
+   a. In this package, edit cloud-config.js and save your real Supabase URL and public publishable/anon key first.
+   b. Sign in to Netlify and open your EXISTING ArcadiumX site (do not create a new site).
+   c. Open the site's Deploys page. Use the manual deploy / deploy-drop area shown by Netlify and drag the EXTRACTED WEBSITE FOLDER CONTENTS (the index.html file, assets folder, game folder, games folder, cloud-config.js, and cloud-save.js) into the drop area. Do not upload the ZIP file itself, and do not upload a parent folder that adds an extra directory level above index.html.
+   d. This creates a new deploy for the existing site, so its current Netlify URL stays the same. Keep a copy of your previous deployment/package so you can roll back if needed.
+   e. If your existing Netlify site uses a different publish directory or build setup, follow that site's current deploy method and replace its published website files with these files.
+7. Test: create an account, play a game to generate local progress, click Account -> Save now. Open the same website in another browser, sign in, open the same game, and click Restore save.
+7. Test: create an account, play a game to generate local progress, click Account -> Save now. Open the same website in another browser, sign in, open the same game, and click Restore save.
+
+CURRENT LIMITATIONS
+- The cloud account service is not live until you complete steps 1–4 with your own Supabase project.
+- The current save bridge syncs localStorage entries recognized for each game. Aquasub Go (dd-* keys) and Jet Rush (skyline3d* keys) have local save keys. FLUXR currently may not persist all game state to localStorage, so only its existing browser-persisted keys can sync until its gameplay save logic is connected.
+- Cloud restore replaces matching local keys after asking for confirmation. It does not yet merge conflicting progress or resolve simultaneous play on multiple devices.
+- The hub's per-game account panel is shown on the hub and each game page. Deploy over HTTPS for production use.
+
+
+NETLIFY REMINDER
+- You do not need to change your Netlify site name or domain. Deploy these files to the existing site.
+- Cloud accounts will NOT work until Supabase is configured in cloud-config.js and the SQL schema has been run.
+- Never paste a Supabase service_role/secret key into cloud-config.js; only use the public publishable/anon key.
